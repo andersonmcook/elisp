@@ -1,6 +1,8 @@
 defmodule Elisp do
   @moduledoc """
   Documentation for `Elisp`.
+
+  Right now you can't define 2 functions per module, it is quite unhappy about that.
   """
 
   @meta [context: Elixir, import: Kernel]
@@ -33,10 +35,10 @@ defmodule Elisp do
 
   defp prepare_module({:defmodule, [{name, definitions}]}) do
     {:defmodule, @meta,
-     [{:__aliases__, [alias: false], [name]}, [do: prepare_definitions(definitions)]]}
+     [{:__aliases__, [alias: false], [name]}, [do: Enum.map(definitions, &prepare_definitions/1)]]}
   end
 
-  defp prepare_definitions([{:def, [{name, [{args, body}]}]}]) do
+  defp prepare_definitions({:def, [{name, [{args, body}]}]}) do
     {:def, @meta, [{name, [context: Elixir], Enum.map(args, &meta/1)}, [do: prepare_body(body)]]}
   end
 

@@ -1,35 +1,22 @@
 -module(parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/parser.yrl", 23).
+-file("src/parser.yrl", 15).
 value_of(Token) ->
     element(3, Token).
 
-% this overly flattens so that means line 9 is probably too greedy.
 join(Symbol, NilOrList) ->
     case NilOrList of
         nil ->
-            erlang:display("here"),
             [Symbol, []];
         Atom when is_atom(Atom) ->
-            erlang:display({Symbol, Atom}),
             [Symbol, Atom];
-        %% List ->
-            %% [Symbol | List]
-            %% [Symbol, List]
         [Atom | List] ->
-            erlang:display({Symbol, [Atom | List]}),
-            %% [Symbol, join(Atom, List)];
-            %% [Symbol, Atom | List];
             {Symbol, [Atom | List]};
         [] ->
             Symbol;
         Other ->
-            erlang:display({"Other", Other}),
             {Symbol, [Other]}
-
     end.
-
-%% (defmodule A (def f (x) (+ x x)))
 
 -file("/Users/acook/.asdf/installs/erlang/22.3.3/lib/parsetools-2.1.8/include/yeccpre.hrl", 0).
 %%
@@ -203,7 +190,7 @@ yecctoken2string(Other) ->
 
 
 
--file("src/parser.erl", 206).
+-file("src/parser.erl", 193).
 
 -dialyzer({nowarn_function, yeccpars2/7}).
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -315,7 +302,7 @@ yeccpars2_6_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_7_/1}).
--file("src/parser.yrl", 15).
+-file("src/parser.yrl", 8).
 yeccpars2_7_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -323,7 +310,7 @@ yeccpars2_7_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_8_/1}).
--file("src/parser.yrl", 10).
+-file("src/parser.yrl", 7).
 yeccpars2_8_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -339,4 +326,4 @@ yeccpars2_9_(__Stack0) ->
   end | __Stack].
 
 
--file("src/parser.yrl", 53).
+-file("src/parser.yrl", 32).

@@ -1,13 +1,13 @@
 Definitions.
 
-Whitespace = [\s\t]
+Whitespace = [\s\t\n\r]+
 Terminator = \n|\r\n|\r
 
 OpenParensData = '\( 
 OpenParens = \(
 CloseParens = \)
-Symbol = [a-zA-z+]*
-AllElse = [^a-zA-z\(\)('\()+]*
+Symbol = [a-zA-z0-9+*]*
+AllElse = [^a-zA-z0-9\(\)('\()+*]*
 
 Rules.
 
