@@ -2,10 +2,12 @@ defmodule Elisp do
   @moduledoc """
   Documentation for `Elisp`.
 
-  Right now you can't define 2 functions per module, it is quite unhappy about that.
+  Next need to have data lists and literals in pattern-matching
+  And strings and floats and integers and data structures
   """
 
-  @meta [context: Elixir, import: Kernel]
+  @context [context: Elixir]
+  @meta @context ++ [import: Kernel]
 
   def lex!(charlist) do
     charlist
@@ -33,17 +35,37 @@ defmodule Elisp do
     |> Code.compile_quoted()
   end
 
-  defp prepare_module({:defmodule, [{name, definitions}]}) do
-    {:defmodule, @meta,
-     [{:__aliases__, [alias: false], [name]}, [do: Enum.map(definitions, &prepare_definitions/1)]]}
+  # defp prepare_module({:defmodule, [{name, definitions}]}) do
+  #   {:defmodule, @meta,
+  #    [{:__aliases__, [alias: false], [name]}, [do: Enum.map(definitions, &prepare_definitions/1)]]}
+  # end
+
+  # defp prepare_definitions({:def, [{name, [{args, body}]}]}) do
+  #   {:def, @meta, [{name, [context: Elixir], Enum.map(args, &meta/1)}, [do: prepare_body(body)]]}
+  # end
+
+  # defp prepare_body([{function, args}]) do
+  #   {function, @meta, Enum.map(args, &meta/1)}
+  # end
+
+  defp prepare_module([:defmodule, name | definitions]) do
+    {:defmodule, @meta, [aliases(name), [do: Enum.map(definitions, &prepare_definitions/1)]]}
   end
 
-  defp prepare_definitions({:def, [{name, [{args, body}]}]}) do
-    {:def, @meta, [{name, [context: Elixir], Enum.map(args, &meta/1)}, [do: prepare_body(body)]]}
+  defp prepare_definitions({[:def, name, {args}, {body}]}) do
+    {:def, @meta, [{name, @context, Enum.map(args, &meta/1)}, [do: prepare_body(body)]]}
   end
 
-  defp prepare_body([{function, args}]) do
+  defp prepare_body([value | []]) do
+    value
+  end
+
+  defp prepare_body([function | args]) do
     {function, @meta, Enum.map(args, &meta/1)}
+  end
+
+  defp aliases(name) do
+    {:__aliases__, [alias: false], [name]}
   end
 
   defp meta(atom) do
