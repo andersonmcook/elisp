@@ -27,12 +27,12 @@ defmodule Elisp do
     end
   end
 
-  def compile!(charlist) do
+  def compile!(charlist, file_name \\ "nofile") do
     charlist
     |> lex!()
     |> parse!()
     |> prepare_module()
-    |> Code.compile_quoted()
+    |> Code.compile_quoted(file_name)
   end
 
   # defp prepare_module({:defmodule, [{name, definitions}]}) do
