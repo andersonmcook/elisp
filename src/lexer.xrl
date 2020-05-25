@@ -2,6 +2,7 @@ Definitions.
 
 Whitespace = [\s\t\n\r]+
 Terminator = \n|\r\n|\r
+Comment = {Whitespace};.*{Terminator}
 
 OpenParensData = '\( 
 OpenParens = \(
@@ -11,6 +12,7 @@ AllElse = [^a-zA-z0-9\(\)('\()+*]*
 
 Rules.
 
+{Comment} : skip_token.
 {Whitespace} : skip_token.
 {Terminator} : skip_token.
 {OpenParensData} : {token, {open_parens_data, TokenLine, list_to_atom(TokenChars)}}.

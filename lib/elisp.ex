@@ -35,19 +35,6 @@ defmodule Elisp do
     |> Code.compile_quoted(file_name)
   end
 
-  # defp prepare_module({:defmodule, [{name, definitions}]}) do
-  #   {:defmodule, @meta,
-  #    [{:__aliases__, [alias: false], [name]}, [do: Enum.map(definitions, &prepare_definitions/1)]]}
-  # end
-
-  # defp prepare_definitions({:def, [{name, [{args, body}]}]}) do
-  #   {:def, @meta, [{name, [context: Elixir], Enum.map(args, &meta/1)}, [do: prepare_body(body)]]}
-  # end
-
-  # defp prepare_body([{function, args}]) do
-  #   {function, @meta, Enum.map(args, &meta/1)}
-  # end
-
   defp prepare_module([:defmodule, name | definitions]) do
     {:defmodule, @meta, [aliases(name), [do: Enum.map(definitions, &prepare_definitions/1)]]}
   end
@@ -68,7 +55,11 @@ defmodule Elisp do
     {:__aliases__, [alias: false], [name]}
   end
 
-  defp meta(atom) do
-    {atom, [], Elixir}
+  defp meta(arg) when is_atom(arg) do
+    {arg, [], Elixir}
+  end
+
+  defp meta({[function | args]}) do
+    {function, [], Enum.map(args, &meta/1)}
   end
 end

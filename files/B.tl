@@ -1,13 +1,17 @@
 (defmodule B
-  (def f (x y)
+  (def add (x y)
     (+ x y)
   )
 
-  (def g (z)
+  (def square (z)
     (* z z)
   )
 
-  (def h ()
+  (def cube (x)
+   (* x (square x))
+  )
+
+  (def six ()
     (6)
   )
 )
