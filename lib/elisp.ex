@@ -35,14 +35,18 @@ defmodule Elisp do
     |> Code.compile_quoted(file_name)
   end
 
+  # Build module AST
   defp prepare_module([:defmodule, name | definitions]) do
     {:defmodule, @meta, [aliases(name), [do: Enum.map(definitions, &prepare_definitions/1)]]}
   end
 
+  # Build function declarations AST
   defp prepare_definitions({[:def, name, {args}, {body}]}) do
     {:def, @meta, [{name, @context, Enum.map(args, &meta/1)}, [do: prepare_body(body)]]}
   end
 
+  # Build individual functions AST
+  # How would this handle a nullary function?
   defp prepare_body([value | []]) do
     value
   end
@@ -51,6 +55,7 @@ defmodule Elisp do
     {function, @meta, Enum.map(args, &meta/1)}
   end
 
+  # Aliases module
   defp aliases(name) do
     {:__aliases__, [alias: false], [name]}
   end
