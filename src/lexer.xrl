@@ -2,7 +2,7 @@ Definitions.
 
 Whitespace = [\s\t\n\r]+
 Terminator = \n|\r\n|\r
-Comment = {Whitespace};.*{Terminator}
+Comment = {Whitespace}?;.*{Terminator}
 
 OpenParensData = '\( 
 OpenParens = \(

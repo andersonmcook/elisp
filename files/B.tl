@@ -11,6 +11,7 @@
    (* x (square x))
   )
 
+  ; this function is just awful
   (def six ()
     (6)
   )

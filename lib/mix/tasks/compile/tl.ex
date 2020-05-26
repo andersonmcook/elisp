@@ -1,16 +1,16 @@
 defmodule Mix.Tasks.Compile.Tl do
   @moduledoc "Compiles Terrible Lisp files"
 
+  # compile the file
+  # do some kind of conversion
+  # write it to disk
+  #
+  # figure out what's stale and only recompile that, if you changed a file, it's available for recompilation
   use Mix.Task.Compiler
 
   @impl true
-  def run(args) do
-    # IO.inspect(args, label: "mix task args")
-    # Elisp.compile!(charlist)
-    # files/*.tl files
-
+  def run(_args) do
     project = Mix.Project.config()
-    # IO.inspect(project)
 
     source_paths = project[:tlc_paths] || ["/files"]
 
@@ -78,10 +78,4 @@ defmodule Mix.Tasks.Compile.Tl do
     |> Path.join(file_name)
     |> File.write!(byte_code)
   end
-
-  # compile the file
-  # do some kind of conversion
-  # write it to disk
-  #
-  # figure out what's stale and only recompile that, if you changed a file, it's available for recompilation
 end
